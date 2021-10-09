@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -37,10 +37,10 @@ public:
     VisGradGeom();
     ~VisGradGeom();
 public:
-    void CmpFaceWeight();
-    void CmpAngle( Real dx, Real dy, Real dz, Real dist, Real & angle );
+    void CalcFaceWeight();
+    void CalcAngle( Real dx, Real dy, Real dz, Real dist, Real & angle );
     void PrepareCellGeom();
-    void CmpGradCoef();
+    void CalcGradCoef();
 public:
     Real dxl, dyl, dzl;
     Real dxr, dyr, dzr;
@@ -73,15 +73,15 @@ public:
     void ZeroNormalGrad();
     void AverFaceValue ();
     void CorrectFaceGrad();
-    void CmpNormalGrad();
-    void CmpTestMethod();
-    void CmpNew1Method();
-    void CmpNew2Method();
+    void CalcNormalGrad();
+    void CalcTestMethod();
+    void CalcNew1Method();
+    void CalcNew2Method();
     bool FaceAngleIsValid();
     bool TestSatisfied();
     bool New1Satisfied();
     bool New2Satisfied();
-    void ComputeC1C2();
+    void CalcC1C2();
     void AccurateSideValue();
     void AccurateFaceValue();
     void ModifyFaceGrad();

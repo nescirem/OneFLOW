@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -126,7 +126,7 @@ void MyRRegion::Test()
 
     this->AddBcRegion( &r2 );
 
-    this->ComputeDiv( refregions );
+    this->CalcDiv( refregions );
 
     this->GenerateRegions( subregions );
 
@@ -137,14 +137,14 @@ void MyRRegion::Test()
 
 void MyRRegion::Run()
 {
-    this->ComputeDiv( this->refregions );
+    this->CalcDiv( this->refregions );
 
     this->GenerateRegions( this->subregions );
 
     this->CollectNoSetBoundary();
 }
 
-void MyRRegion::ComputeDiv( MyRegions & regions )
+void MyRRegion::CalcDiv( MyRegions & regions )
 {
     IntSet idiv_set, jdiv_set, kdiv_set;
     int nr = regions.size();

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -22,7 +22,7 @@ License
 
 #include "NsSolverImp.h"
 #include "SolverImp.h"
-#include "UTimestep.h"
+#include "UTimeStep.h"
 #include "Zone.h"
 #include "GridState.h"
 #include "UNsVisFlux.h"
@@ -42,13 +42,13 @@ void RegisterNsFunc()
 {
     REGISTER_DATA_CLASS( NsInitFinal );
     REGISTER_DATA_CLASS( NsVisual );
-    REGISTER_DATA_CLASS( NsCmpTimeStep );
+    REGISTER_DATA_CLASS( NsCalcTimeStep );
     REGISTER_DATA_CLASS( NsUpdateResiduals );
     REGISTER_DATA_CLASS( NsImplicitMethod );
     REGISTER_DATA_CLASS( NsPostprocess );
     REGISTER_DATA_CLASS( NsFinalPostprocess );
     REGISTER_DATA_CLASS( NsInitSolver );
-    REGISTER_DATA_CLASS( NsCmpBoundary );
+    REGISTER_DATA_CLASS( NsCalcBoundary );
     REGISTER_DATA_CLASS( DumpHeatFluxCoeff );
     SetPlateTask();
     SetTurbPlateTask();
@@ -56,11 +56,11 @@ void RegisterNsFunc()
 
 void NsInitFinal( StringField & data )
 {
-    NSCmpGamaT( F_INNER );
-    CmpLaminarViscosity( F_INNER );
-    NsCmpBc();
-    NSCmpGamaT( F_GHOST );
-    CmpLaminarViscosity( F_GHOST );
+    NsCalcGamaT( F_INNER );
+    CalcLaminarViscosity( F_INNER );
+    NsCalcBc();
+    NsCalcGamaT( F_GHOST );
+    CalcLaminarViscosity( F_GHOST );
 
     Grid * grid = Zone::GetGrid();
 
@@ -70,7 +70,7 @@ void NsInitFinal( StringField & data )
 
         GridState::gridLevel += 1;
 
-        NsCmpBc();
+        NsCalcBc();
 
         GridState::gridLevel -= 1;
     }
@@ -81,26 +81,26 @@ void NsVisual( StringField & data )
     ;
 }
 
-void NsCmpBoundary( StringField & data )
+void NsCalcBoundary( StringField & data )
 {
-    NSCmpGamaT( F_INNER );
-    CmpLaminarViscosity( F_INNER );
-    NsCmpBc();
-    NSCmpGamaT( F_GHOST );
-    CmpLaminarViscosity( F_GHOST );
+    NsCalcGamaT( F_INNER );
+    CalcLaminarViscosity( F_INNER );
+    NsCalcBc();
+    NsCalcGamaT( F_GHOST );
+    CalcLaminarViscosity( F_GHOST );
 }
 
-void NsCmpTimeStep( StringField & data )
+void NsCalcTimeStep( StringField & data )
 {
-    UTimestep * uTimestep = new UTimestep();
-    uTimestep->CmpTimestep();
-    delete uTimestep;
+    UTimeStep * uTimeStep = new UTimeStep();
+    uTimeStep->CalcTimeStep();
+    delete uTimeStep;
 }
 
 void NsUpdateResiduals( StringField & data )
 {
     Rhs * rhs = new Rhs();
-    rhs->UpdateResiduals();
+    rhs->UpdateNsResiduals();
     delete rhs;
 }
 

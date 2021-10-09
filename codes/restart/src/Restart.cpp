@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,6 +38,7 @@ License
 #include "FieldAlloc.h"
 #include "UsdPara.h"
 #include "RegisterUtil.h"
+#include "INsRestart.h"
 
 BeginNameSpace( ONEFLOW )
 
@@ -46,6 +47,10 @@ Restart * CreateRestart( int sTid )
     if ( sTid == NS_SOLVER )
     {
         return CreateNsRestart();
+    }
+    else if ( sTid == INC_NS_SOLVER )
+    {
+        return CreateINsRestart();
     }
     else if ( sTid == TURB_SOLVER )
     {
@@ -161,6 +166,12 @@ void Restart::InitRestart( int sTid )
 {
     Iteration::outerSteps = 0;
     ctrl.currTime = 0.0;
+}
+
+void Restart::InitinsRestart( int sTid )
+{
+	Iteration::outerSteps = 0;
+	ctrl.currTime = 0.0;
 }
 
 void ReadRestartHeader()

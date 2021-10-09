@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -151,7 +151,7 @@ void WallVisual::BuildFaceTopo( IntField & faceNodeIndexArray, int loc_Face, int
     }
 }
 
-void WallVisual::CmpOrderMap( int & nBFace, IntField & orderMapping )
+void WallVisual::CalcOrderMap( int & nBFace, IntField & orderMapping )
 {
     int nFace = rCell.size();
     orderMapping.resize( nFace );
@@ -214,7 +214,7 @@ void WallVisual::ConstructTopology3D()
 
     IntField orderMapping;
     int nBFace = 0;
-    CmpOrderMap( nBFace, orderMapping );
+    CalcOrderMap( nBFace, orderMapping );
 
     ONEFLOW::Reorder( this->lCell, orderMapping );
     ONEFLOW::Reorder( this->rCell, orderMapping );

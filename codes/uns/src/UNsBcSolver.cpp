@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -52,7 +52,7 @@ void UNsBcSolver::Init()
     unsf.Init();
 }
 
-void UNsBcSolver::CmpBc()
+void UNsBcSolver::CalcBc()
 {
     ug.nRegion = ug.bcRecord->bcInfo->bcType.size();
 
@@ -63,7 +63,7 @@ void UNsBcSolver::CmpBc()
         ug.nRBFace = ug.bcRecord->bcInfo->bcFace[ ir ].size();
         this->SetBc();
 
-        this->CmpBcRegion();
+        this->CalcBcRegion();
     }
 }
 
@@ -74,16 +74,14 @@ void UNsBcSolver::SetId( int bcfId )
     BcInfo * bcInfo = ug.bcRecord->bcInfo;
 
     ug.fId = bcInfo->bcFace[ ug.ir ][ bcfId ];
-    ug.bcr = bcInfo->bcRegion[ ug.ir ][ bcfId ];
-
-    ug.bcdtkey = bcInfo->bcdtkey[ ug.ir ][ bcfId ];
+    ug.bcNameId = bcInfo->bcNameId[ ug.ir ][ bcfId ];
 
     ug.lc = ( * ug.lcf )[ ug.fId ];
     ug.rc = ( * ug.rcf )[ ug.fId ];
 
     nscom.bcdtkey = 0;
-    if ( ug.bcr == -1 ) return; //interface
-    int dd = bcdata.r2d[ ug.bcr ];
+    if ( ug.bcNameId == -1 ) return; //interface
+    int dd = bcdata.r2d[ ug.bcNameId ];
     if ( dd != - 1 )
     {
         nscom.bcdtkey = 1;
@@ -92,7 +90,7 @@ void UNsBcSolver::SetId( int bcfId )
 
 }
 
-void UNsBcSolver::CmpBcRegion()
+void UNsBcSolver::CalcBcRegion()
 {
     for ( int ibc = 0; ibc < ug.nRBFace; ++ ibc )
     {
@@ -100,7 +98,7 @@ void UNsBcSolver::CmpBcRegion()
 
         this->PrepareData();
 
-        this->CmpFaceBc();
+        this->CalcFaceBc();
 
         this->UpdateBc();
     }

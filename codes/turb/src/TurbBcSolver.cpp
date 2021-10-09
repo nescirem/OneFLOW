@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -34,6 +34,8 @@ License
 using namespace std;
 
 BeginNameSpace( ONEFLOW )
+
+BcData turb_bc_data;
 
 TurbBcSolver::TurbBcSolver()
 {
@@ -105,7 +107,7 @@ void TurbBcSolver::SetBc()
     }
 }
 
-void TurbBcSolver::CmpFaceBc()
+void TurbBcSolver::CalcFaceBc()
 {
     ( this->* bcPointer )();
 }

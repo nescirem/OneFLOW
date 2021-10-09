@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -20,6 +20,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 #include "FieldAlloc.h"
+#include "SimuCtrl.h"
 #include "FieldImp.h"
 #include "UsdPara.h"
 #include "SolverInfo.h"
@@ -54,10 +55,8 @@ void FieldAlloc::AllocateAllFields( int sTid, const string & basicString )
 void FieldAlloc::InitField( int sTid, const string & basicString )
 {
     ONEFLOW::StrIO.ClearAll();
-    ONEFLOW::StrIO << "./system/" << basicString << "/alloc/" << "init.txt";
+    ONEFLOW::StrIO << SimuCtrl::system_root << basicString << "/alloc/" << "init.txt";
     std::string fileName = ONEFLOW::StrIO.str();
-
-    //NameValuePair nameValuePair;
 
     BoolIO boolIO;
     boolIO.ReadFile( fileName, 1 );
@@ -76,8 +75,8 @@ void FieldAlloc::RegisterInterfaceVar( int sTid, const string & basicString )
     StringField fileNameList;
     IntField fieldTypeList;
 
-    FieldAlloc::CmpInterfaceFileName( basicString, fileNameList );
-    FieldAlloc::CmpInterfaceFileType( fieldTypeList );
+    FieldAlloc::CalcInterfaceFileName( basicString, fileNameList );
+    FieldAlloc::CalcInterfaceFileType( fieldTypeList );
     
     for ( int iFile = 0; iFile < fileNameList.size(); ++ iFile )
     {
@@ -93,7 +92,7 @@ void FieldAlloc::AllocateGlobalField( int sTid, const string & basicString )
 {
     FieldFactory::AddFieldManager( sTid );
     StringField fileNameList;
-    FieldAlloc::CmpInnerFieldFileName( basicString, fileNameList );
+    FieldAlloc::CalcInnerFieldFileName( basicString, fileNameList );
 
     for ( int iFile = 0; iFile < fileNameList.size(); ++ iFile )
     {
@@ -135,7 +134,7 @@ void FieldAlloc::AllocateOversetInterfaceField( IFieldProperty * iFieldProperty 
 {
 }
 
-void FieldAlloc::CmpInnerFieldFileName( const string & basicString, StringField & fileNameList )
+void FieldAlloc::CalcInnerFieldFileName( const string & basicString, StringField & fileNameList )
 {
     StringField basicNameList;
     basicNameList.push_back( "unsteady" );
@@ -144,7 +143,7 @@ void FieldAlloc::CmpInnerFieldFileName( const string & basicString, StringField 
     basicNameList.push_back( "bc"       );
 
     ONEFLOW::StrIO.ClearAll();
-    ONEFLOW::StrIO << "./system/" << basicString << "/alloc/";
+    ONEFLOW::StrIO << SimuCtrl::system_root << basicString << "/alloc/";
     string rootString = ONEFLOW::StrIO.str();
 
     for ( int i = 0; i < basicNameList.size(); ++ i )
@@ -158,7 +157,7 @@ void FieldAlloc::CmpInnerFieldFileName( const string & basicString, StringField 
     }
 }
 
-void FieldAlloc::CmpInterfaceFileName( const string & basicString, StringField & fileNameList )
+void FieldAlloc::CalcInterfaceFileName( const string & basicString, StringField & fileNameList )
 {
     StringField basicNameList;
     basicNameList.push_back( "inter"        );
@@ -167,7 +166,7 @@ void FieldAlloc::CmpInterfaceFileName( const string & basicString, StringField &
     basicNameList.push_back( "interOverset" );
 
     ONEFLOW::StrIO.ClearAll();
-    ONEFLOW::StrIO << "./system/" << basicString << "/alloc/";
+    ONEFLOW::StrIO << SimuCtrl::system_root << basicString << "/alloc/";
     string rootString = ONEFLOW::StrIO.str();
 
     for ( int i = 0; i < basicNameList.size(); ++ i )
@@ -181,7 +180,7 @@ void FieldAlloc::CmpInterfaceFileName( const string & basicString, StringField &
     }
 }
 
-void FieldAlloc::CmpInterfaceFileType( IntField & fieldTypeList )
+void FieldAlloc::CalcInterfaceFileType( IntField & fieldTypeList )
 {
     fieldTypeList.push_back( ONEFLOW::INTERFACE_DATA          );
     fieldTypeList.push_back( ONEFLOW::INTERFACE_DQ_DATA       );
@@ -207,7 +206,7 @@ void FieldNamePair::SetField( int sTid, NameValuePair & valuePair )
     }
 }
 
-bool CmpBoolExp( bool var1, const string & opName, bool var2 )
+bool CalcBoolExp( bool var1, const string & opName, bool var2 )
 {
     if ( opName == "&&" )
     {
@@ -220,7 +219,7 @@ bool CmpBoolExp( bool var1, const string & opName, bool var2 )
     return false;
 }
 
-bool CmpBoolExp( const string & varName1, const string & opName, const string & varName2 )
+bool CalcBoolExp( const string & varName1, const string & opName, const string & varName2 )
 {
     int var1 = ONEFLOW::GetVarDimension( varName1 );
     int var2 = ONEFLOW::GetVarDimension( varName2 );
@@ -251,7 +250,7 @@ bool CmpBoolExp( const string & varName1, const string & opName, const string & 
     return false;
 }
 
-bool CmpVarValue( const string & varName, StringField & boolName, BoolField & boolVar )
+bool CalcVarValue( const string & varName, StringField & boolName, BoolField & boolVar )
 {
     int index = -1;
     for ( int i = 0; i < boolName.size(); ++ i )
@@ -300,7 +299,7 @@ void BoolIO::ReadBool( FileIO * ioFile )
     string opName  = ioFile->ReadNextWord();
     string var2    = ioFile->ReadNextWord();
 
-    bool boolValue = ONEFLOW::CmpBoolExp( var1, opName, var2 );
+    bool boolValue = ONEFLOW::CalcBoolExp( var1, opName, var2 );
 
     this->Add( varName, boolValue );
 }
@@ -313,17 +312,17 @@ void BoolIO::ReadSuperBool( FileIO * ioFile )
     string opName  = ioFile->ReadNextWord();
     string var2    = ioFile->ReadNextWord();
 
-    bool varVaule1 = ONEFLOW::CmpVarValue( var1, this->boolNameList, this->boolValueList );
-    bool varVaule2 = ONEFLOW::CmpVarValue( var2, this->boolNameList, this->boolValueList );
+    bool varVaule1 = ONEFLOW::CalcVarValue( var1, this->boolNameList, this->boolValueList );
+    bool varVaule2 = ONEFLOW::CalcVarValue( var2, this->boolNameList, this->boolValueList );
 
-    bool boolValue = ONEFLOW::CmpBoolExp( varVaule1, opName, varVaule2 );
+    bool boolValue = ONEFLOW::CalcBoolExp( varVaule1, opName, varVaule2 );
 
     this->Add( varName, boolValue );
 }
 
-bool BoolIO::CmpVarValue( const string & varName )
+bool BoolIO::CalcVarValue( const string & varName )
 {
-    bool result = ONEFLOW::CmpVarValue( varName, this->boolNameList, this->boolValueList );
+    bool result = ONEFLOW::CalcVarValue( varName, this->boolNameList, this->boolValueList );
     return result;
 }
 
@@ -390,7 +389,7 @@ void BoolIO::ReadFile( const string & fileName, int valueFlag )
         else
         {
             string expression = keyWord;
-            bool flag = this->CmpVarValue( expression );
+            bool flag = this->CalcVarValue( expression );
 
             if ( flag )
             {

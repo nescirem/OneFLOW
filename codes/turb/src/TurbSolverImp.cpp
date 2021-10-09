@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,27 +38,27 @@ void SetTurbFunc()
     REGISTER_DATA_CLASS( TurbPostprocess );
     REGISTER_DATA_CLASS( TurbFinalPostprocess );
     REGISTER_DATA_CLASS( TurbInitSolver );
-    REGISTER_DATA_CLASS( TurbCmpBoundary );
+    REGISTER_DATA_CLASS( TurbCalcBoundary );
 }
 
 void TurbInitFinal( StringField & data )
 {
-    CmpTurbulentViscosity();
+    CalcTurbulentViscosity();
 
-    TurbCmpBc();
+    TurbCalcBc();
 }
 
-void TurbCmpBoundary( StringField & data )
+void TurbCalcBoundary( StringField & data )
 {
-    CmpTurbulentViscosity();
+    CalcTurbulentViscosity();
 
-    TurbCmpBc();
+    TurbCalcBc();
 }
 
 void TurbUpdateResiduals( StringField & data )
 {
     TurbRhs * rhs = new TurbRhs();
-    rhs->CmpRHS();
+    rhs->CalcRHS();
     delete rhs;
 }
 

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -60,30 +60,30 @@ public:
     RealField work_s;
 public:
     void Init();
-    void ComputeRefPara();
-    void ComputeRefGasInfo();
-    void ComputeRefGama();
-    void ComputeRefSoundSpeed();
-    void ComputeRefMachAndVel();
-    void ComputeStateCoef();
-    void ComputeStateCoefNs();
-    void ComputeStateCoefChemical();
-    void ComputeRefPrim();
-    void ComputeRefReynolds();
-    void ComputeDimRefViscosity();
-    void ComputeDimRefViscosityNs();
-    void ComputeDimRefViscosityChemical();
-    void ComputeSutherlandConstant();
-    void ComputeMoleFractionByMassFraction( RealField & massFrac, RealField & moleFrac );
-    void ComputeDimSpeciesViscosity( Real tm, RealField & vis_s_dim );
-    void ComputeMixtureCoefByWilkeFormula( RealField & moleFrac, RealField & var, RealField & phi );
-    void ComputeMixtureByWilkeFormula( RealField & moleFrac, RealField & mixs, RealField & phi, Real & mixture );
-    void ComputeMixtureByWilkeFormula( RealField & moleFrac, RealField & mixs, Real & mixture );
+    void CalcRefPara();
+    void CalcRefGasInfo();
+    void CalcRefGama();
+    void CalcRefSoundSpeed();
+    void CalcRefMachAndVel();
+    void CalcStateCoef();
+    void CalcStateCoefNs();
+    void CalcStateCoefChemical();
+    void CalcRefPrim();
+    void CalcRefReynolds();
+    void CalcDimRefViscosity();
+    void CalcDimRefViscosityNs();
+    void CalcDimRefViscosityChemical();
+    void CalcSutherlandConstant();
+    void CalcMoleFractionByMassFraction( RealField & massFrac, RealField & moleFrac );
+    void CalcDimSpeciesViscosity( Real tm, RealField & vis_s_dim );
+    void CalcMixtureCoefByWilkeFormula( RealField & moleFrac, RealField & var, RealField & phi );
+    void CalcMixtureByWilkeFormula( RealField & moleFrac, RealField & mixs, RealField & phi, Real & mixture );
+    void CalcMixtureByWilkeFormula( RealField & moleFrac, RealField & mixs, Real & mixture );
     void SetAirInformationByDataBase();
     void NormalizeAirInfo();
-    void ComputeRefMolecularInfo();
-    void ComputeRefMolecularInfoAir();
-    void ComputeRefMolecularInfoChem();
+    void CalcRefMolecularInfo();
+    void CalcRefMolecularInfoAir();
+    void CalcRefMolecularInfoChem();
 public:
     void Alloc();
     void DeAlloc();
@@ -100,8 +100,8 @@ public:
     void CompressData( DataBook *& dataBook );
     void DecompressData( DataBook * dataBook );
 public:
-    void ComputeDimCps( Real tm, RealField & dim_cps );
-    void ComputeMixtureByMassFraction( RealField & cs, RealField & var, Real & mixture );
+    void CalcDimCps( Real tm, RealField & dim_cps );
+    void CalcMixtureByMassFraction( RealField & cs, RealField & var, Real & mixture );
 };
 
 extern Chemical chem;

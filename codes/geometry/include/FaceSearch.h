@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -76,7 +76,7 @@ public:
     IFaceLink * iFaceLink;
     int gFid;
 public:
-    void ComputeNewFaceId( IFaceLink * iFaceLink );
+    void CalcNewFaceId( IFaceLink * iFaceLink );
     void SplitQuad2Tri( FaceSort * pFaceSort );
     void SplitLine( FaceSort * pFaceSort );
     void GetLocalTri( LinkField & localTriId, LinkField & localTriFlag );

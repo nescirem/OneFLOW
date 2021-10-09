@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -52,8 +52,8 @@ public:
     BcVisual();
     ~BcVisual();
 public:
-    void Compute( int bcType );
-    void Cmpf2n( int bcType );
+    void Calc( int bcType );
+    void Calcf2n( int bcType );
     void ResolveElementEdge();
     void Dump( ostringstream & oss, VisualTool * visualTool, string & bcTitle );
     void DumpDebug( ostringstream & oss, VisualTool * visualTool, string & bcTitle );
@@ -75,7 +75,7 @@ public:
 public:
     void Visual();
     bool NeedVisualField();
-    void CmpNodeField( VisualTool * visualTool );
+    void CalcNodeField( VisualTool * visualTool );
     void ShowField( ostringstream & oss, VisualTool * visualTool );
     void ShowBc( ostringstream & oss, VisualTool * visualTool );
     void ShowBcDebugTest( ostringstream & oss, VisualTool * visualTool );
@@ -83,6 +83,6 @@ public:
     int  GetTotalNumFaceNodes( LinkField & f2n );
 };
 
-void CmpMach( MRField * r, MRField * u, MRField * v, MRField * w, MRField * p, MRField * gama, MRField * mach );
+void CalcMach( MRField * r, MRField * u, MRField * v, MRField * w, MRField * p, MRField * gama, MRField * mach );
 
 EndNameSpace

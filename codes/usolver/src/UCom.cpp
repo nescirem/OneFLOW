@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -47,7 +47,8 @@ UGeom::~UGeom()
 
 void UGeom::Init()
 {
-    UnsGrid * grid = Zone::GetUnsGrid();
+    //UnsGrid * grid = Zone::GetUnsGrid();
+    grid = Zone::GetUnsGrid();
 
     ug.nBFace = grid->nBFace;
     ug.nCell = grid->nCell;
@@ -55,7 +56,7 @@ void UGeom::Init()
     ug.nFace = grid->nFace;
 
     this->SetStEd( F_TOTAL );
-    this->CreateBcRegion();
+    this->CreateBcTypeRegion();
 
     FaceTopo * faceTopo = grid->faceTopo;
     ug.lcf = & faceTopo->lCell;
@@ -89,7 +90,7 @@ void UGeom::Init()
 
     ug.blankf = & cellTopo->blank;
 
-    cellTopo->CmpC2f( faceTopo );
+    cellTopo->CalcC2f( faceTopo );
 
     ug.c2f = & cellTopo->c2f;
 
@@ -97,11 +98,11 @@ void UGeom::Init()
     ug.ireconface = 1;
 }
 
-void UGeom::CreateBcRegion()
+void UGeom::CreateBcTypeRegion()
 {
     UnsGrid * grid = Zone::GetUnsGrid();
     BcRecord * bcRecord = grid->faceTopo->bcManager->bcRecord;
-    bcRecord->CreateBcRegion();
+    bcRecord->CreateBcTypeRegion();
 
     ug.bcRecord = bcRecord;
 }
@@ -143,7 +144,6 @@ void AddF2CField( MRField * cellField, MRField * faceField )
         ug.fId = fId;
         ug.lc = ( * ug.lcf )[ ug.fId ];
         ug.rc = ( * ug.rcf )[ ug.fId ];
-        //if ( ug.lc == 0 ) cout << fId << endl;
 
         for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
         {
@@ -156,8 +156,6 @@ void AddF2CField( MRField * cellField, MRField * faceField )
         ug.fId = fId;
         ug.lc = ( * ug.lcf )[ ug.fId ];
         ug.rc = ( * ug.rcf )[ ug.fId ];
-
-        //if ( ug.lc == 0 || ug.rc == 0 ) cout << fId << endl;
 
         for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
         {
@@ -176,9 +174,24 @@ void AddF2CFieldDebug( MRField * cellField, MRField * faceField )
         ug.lc = ( * ug.lcf )[ ug.fId ];
         ug.rc = ( * ug.rcf )[ ug.fId ];
 
+        if ( ug.lc == 9 || ug.rc == 9 )
+        {
+            cout << " fId = " << fId << "\n";
+            int iEqu = 0;
+            cout << ( * faceField )[ iEqu ][ ug.fId ] << "\n";
+        }
+
         for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
         {
             ( * cellField )[ iEqu ][ ug.lc ] -= ( * faceField )[ iEqu ][ ug.fId ];
+        }
+        if ( ug.lc == 9 || ug.rc == 9 )
+        {
+            for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
+            {
+                int cc = 9;
+                cout << ( * cellField )[ iEqu ][ cc ] << "\n";
+            }
         }
     }
 
@@ -187,13 +200,34 @@ void AddF2CFieldDebug( MRField * cellField, MRField * faceField )
         ug.fId = fId;
         ug.lc = ( * ug.lcf )[ ug.fId ];
         ug.rc = ( * ug.rcf )[ ug.fId ];
+        if ( ug.lc == 9 || ug.rc == 9 )
+        {
+            cout << " fId = " << fId << "\n";
+            int iEqu = 0;
+            cout << ( * faceField )[ iEqu ][ ug.fId ] << "\n";
+        }
 
         for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
         {
             ( * cellField )[ iEqu ][ ug.lc ] -= ( * faceField )[ iEqu ][ ug.fId ];
             ( * cellField )[ iEqu ][ ug.rc ] += ( * faceField )[ iEqu ][ ug.fId ];
         }
+        if ( ug.lc == 9 || ug.rc == 9 )
+        {
+            for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
+            {
+                int cc = 9;
+                cout << ( * cellField )[ iEqu ][ cc ] << "\n";
+            }
+        }
     }
+
+    for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
+    {
+        int cc = 9;
+        cout << ( * cellField )[ iEqu ][ cc ] << "\n";
+    }
+    int kkk = 1;
 }
 
 EndNameSpace

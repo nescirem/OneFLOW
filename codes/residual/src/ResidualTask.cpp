@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -64,14 +64,14 @@ void ResidualTask::Run()
         if (  ! ZoneState::IsValidZone( zId ) ) continue;
         ZoneState::zid = zId;
         dataList[ iCount ].Init( solverInfo->nEqu );
-        this->CmpRes( SolverState::tid, dataList[ iCount ] );
+        this->CalcRes( SolverState::tid, dataList[ iCount ] );
         ++ iCount;
     }
 
     PostDumpResiduals();
 }
 
-void ResidualTask::CmpRes( int sTid, ResData & data )
+void ResidualTask::CalcRes( int sTid, ResData & data )
 {
     UnsGrid * grid = Zone::GetUnsGrid();
     SolverInfo * solverInfo = SolverInfoFactory::GetSolverInfo( sTid );
@@ -91,6 +91,11 @@ void ResidualTask::CmpRes( int sTid, ResData & data )
         for ( int cId = 0; cId < grid->nCell; ++ cId )
         {
             Real ress = ( * res )[ iEqu ][ cId ];
+            if ( NotANumber( ress ) )
+            {
+                cout << " iEqu = " << iEqu << " cId = " << cId << " grid->nCell = " << grid->nCell << "\n";
+                cout << " ress = " << ress << "\n";
+            }
             data.resave.res[ iEqu ] += SQR( ress );
             if ( data.resmax.resmax[ iEqu ] < ABS( ress ) )
             {
@@ -121,8 +126,8 @@ void ResidualTask::CmpRes( int sTid, ResData & data )
 void ResidualTask::PostDumpResiduals()
 {
     size_t nEqu = this->data.resave.res.size();
-    this->data.resave.CmpAver( dataList );
-    this->data.resmax.CmpMax( dataList );
+    this->data.resave.CalcAver( dataList );
+    this->data.resmax.CalcMax( dataList );
 
     if ( Parallel::pid != Parallel::serverid ) return;
 
@@ -182,7 +187,7 @@ void ResidualTask::DumpFile()
 
 void ResidualTask::DumpScreen()
 {
-    int maxId = this->data.resmax.CmpMaxId();
+    int maxId = this->data.resmax.CalcMaxId();
 
     ostringstream oss;
     if ( ( Iteration::outerSteps - 1 ) % 100 == 0 )

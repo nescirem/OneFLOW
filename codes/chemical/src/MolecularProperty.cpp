@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -110,7 +110,7 @@ void MolecularProperty::Read( FileIO * ioFile )
         ct[ iSpecies ] = ioFile->ReadNextDigit< Real >();
     }
 
-    schmidtNumber->ComputeSchmidtNumber( ion_type );
+    schmidtNumber->CalcSchmidtNumber( ion_type );
 }
 
 void MolecularProperty::Read( DataBook * dataBook )
@@ -155,7 +155,7 @@ void MolecularProperty::Write( DataBook * dataBook )
     HXAppend( dataBook, omw );
 }
 
-void MolecularProperty::ComputeProperty()
+void MolecularProperty::CalcProperty()
 {
     //dimensional molecular weight
     Real coef = 1.0e-3;

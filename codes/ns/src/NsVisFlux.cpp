@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -104,28 +104,28 @@ void NsVisFlux::CorrectFaceGrad()
     visT.CorrectFaceGrad();
 }
 
-void NsVisFlux::CmpNormalGrad()
+void NsVisFlux::CalcNormalGrad()
 {
-    visQ.CmpNormalGrad();
-    visT.CmpNormalGrad();
+    visQ.CalcNormalGrad();
+    visT.CalcNormalGrad();
 }
 
-void NsVisFlux::CmpTestMethod()
+void NsVisFlux::CalcTestMethod()
 {
-    visQ.CmpTestMethod();
-    visT.CmpTestMethod();
+    visQ.CalcTestMethod();
+    visT.CalcTestMethod();
 }
 
-void NsVisFlux::CmpNew1Method()
+void NsVisFlux::CalcNew1Method()
 {
-    visQ.CmpNew1Method();
-    visT.CmpNew1Method();
+    visQ.CalcNew1Method();
+    visT.CalcNew1Method();
 }
 
-void NsVisFlux::CmpNew2Method()
+void NsVisFlux::CalcNew2Method()
 {
-    visQ.CmpNew2Method();
-    visT.CmpNew2Method();
+    visQ.CalcNew2Method();
+    visT.CalcNew2Method();
 }
 
 void NsVisFlux::ModifyFaceGrad()
@@ -146,12 +146,12 @@ Sutherland::~Sutherland()
 
 }
 
-void Sutherland::CmpConst()
+void Sutherland::CalcConst()
 {
     Sutherland::c = Sutherland::cdim / nscom.tref_dim;
 }
 
-Real Sutherland::CmpViscosity( Real t )
+Real Sutherland::CalcViscosity( Real t )
 {
     Real t3 = t * t * t;
     return sqrt( t3 ) * ( 1 + Sutherland::c ) / ( t + Sutherland::c );

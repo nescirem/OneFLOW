@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -22,7 +22,7 @@ License
 
 
 #pragma once
-#include "CompCoor.h"
+#include "CalcCoor.h"
 #include "SimpleDomain.h"
 #include <map>
 using namespace std;
@@ -73,7 +73,7 @@ public:
     void ConstructDomainTopo();
     void ConstructCtrlPoint();
     void ConstructSLineCtrlPoint();
-    void ComputeCoor( CoorMap * localCoorMap );
+    void CalcCoor( CoorMap * localCoorMap );
     void SetDomainBcMesh( SDomain * sDomain );
     void CreateInpFaceList( HXVector< Face2D * > &facelist );
 };

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -33,14 +33,14 @@ public:
 public:
     void Run();
     void Init();
-    void CmpForce();
+    void CalcForce();
     void Dump();
 public:
     string fileName;
 };
 
 class UnsGrid;
-void CmpAeroForce( int idump_pres );
+void CalcAeroForce( int idump_pres );
 int GetNSolidCell( UnsGrid * grid );
 
 EndNameSpace

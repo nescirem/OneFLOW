@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -54,16 +54,16 @@ void UNsUpdate::UpdateFlowField( int sTid )
     {
         ug.cId = cId;
 
-        if ( ug.cId == 13 )
+        if ( ug.cId == 9 )
         {
             int kkk = 1;
         }
 
         this->PrepareData();
 
-        this->CmpFlowField();
-        //this->CmpFlowFieldHyperSonic();
-        //this->CmpFlowFieldHyperSonic_Temperature();
+        this->CalcFlowField();
+        //this->CalcFlowFieldHyperSonic();
+        //this->CalcFlowFieldHyperSonic_Temperature();
 
         this->UpdateFlowFieldValue();
     }

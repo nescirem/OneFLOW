@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -112,7 +112,7 @@ void UnsGrid::ReadGrid( DataBook * databook )
     cout << "The grid nodes have been read\n";
     ONEFLOW::HXRead( databook, this->volBcType  );
 
-    this->nodeMesh->ComputeMinMaxBox();
+    this->nodeMesh->CalcMinMaxBox();
     this->ReadGridFaceTopology( databook );
     this->ReadBoundaryTopology( databook );
     this->NormalizeBc();
@@ -182,14 +182,14 @@ void UnsGrid::ReadBoundaryTopology( DataBook * databook )
     ONEFLOW::HXRead( databook, this->nBFace );
     this->faceTopo->SetNBFace( this->nBFace );
 
-    cout << "nBFace = " << this->nBFace << endl;
+    //cout << " nBFace = " << this->nBFace << endl;
 
     //设置边界条件
     BcRecord * bcRecord = this->faceTopo->bcManager->bcRecord;
     ONEFLOW::HXRead( databook, bcRecord->bcType );
-    ONEFLOW::HXRead( databook, bcRecord->bcRegion );
+    ONEFLOW::HXRead( databook, bcRecord->bcNameId );
     ONEFLOW::HXRead( databook, this->nIFace );
-
+    cout << " nBFace = " << this->nBFace;
     cout << " nIFace = " << this->nIFace << endl;
     this->interFace->Set( this->nIFace, this );
 
@@ -211,7 +211,7 @@ void UnsGrid::WriteBoundaryTopology( VirtualFile * vf )
 
     ONEFLOW::HXWrite( vf, nBFace );
     ONEFLOW::HXWrite( vf, bcRecord->bcType );
-    ONEFLOW::HXWrite( vf, bcRecord->bcRegion );
+    ONEFLOW::HXWrite( vf, bcRecord->bcNameId );
     ONEFLOW::HXWrite( vf, this->interFace->nIFace );
 
     if ( this->interFace->nIFace > 0 )
@@ -271,7 +271,7 @@ void UnsGrid::WriteBoundaryTopology( DataBook * databook )
     ONEFLOW::HXWrite( databook, nBFace );
 
     ONEFLOW::HXWrite( databook, this->faceTopo->bcManager->bcRecord->bcType );
-    ONEFLOW::HXWrite( databook, this->faceTopo->bcManager->bcRecord->bcRegion );
+    ONEFLOW::HXWrite( databook, this->faceTopo->bcManager->bcRecord->bcNameId );
 
     ONEFLOW::HXWrite( databook, this->interFace->nIFace );
     if ( this->interFace->nIFace > 0 )
@@ -303,7 +303,7 @@ void UnsGrid::GenerateLgMapping( IFaceLink * iFaceLink )
 
     this->faceTopo->bcManager->PreProcess();
 
-    int nIFace = bcRecord->ComputeNIFace();
+    int nIFace = bcRecord->CalcNIFace();
 
     cout << "nIFace = " << nIFace << endl;
     this->nIFace = nIFace;
@@ -465,21 +465,21 @@ void UnsGrid::WriteGridFaceTopology( VirtualFile * vf )
     ONEFLOW::HXWrite( vf, this->faceTopo->rCell );
 }
 
-void UnsGrid::CmpMetrics()
+void UnsGrid::CalcMetrics()
 {
     this->AllocMetrics();
 
     if ( IsOneD() )
     {
-        this->CmpMetrics1D();
+        this->CalcMetrics1D();
     }
     else if ( IsTwoD() )
     {
-        this->CmpMetrics2D();
+        this->CalcMetrics2D();
     }
     else if ( IsThreeD() )
     {
-        this->CmpMetrics3D();
+        this->CalcMetrics3D();
     }
 }
 
@@ -490,39 +490,39 @@ void UnsGrid::AllocMetrics()
 
 }
 
-void UnsGrid::CmpMetrics1D()
+void UnsGrid::CalcMetrics1D()
 {
-    this->ComputeFaceCenter1D();
-    this->ComputeCellCenterVol1D();
-    this->ComputeFaceNormal1D();
-    this->ComputeGhostCellCenterVol1D();
+    this->CalcFaceCenter1D();
+    this->CalcCellCenterVol1D();
+    this->CalcFaceNormal1D();
+    this->CalcGhostCellCenterVol1D();
 }
 
-void UnsGrid::CmpMetrics2D()
+void UnsGrid::CalcMetrics2D()
 {
-    this->ComputeFaceNormal2D();
-    this->ComputeFaceCenter2D();
-    this->ComputeCellCenterVol2D();
+    this->CalcFaceNormal2D();
+    this->CalcFaceCenter2D();
+    this->CalcCellCenterVol2D();
 }
 
-void UnsGrid::CmpMetrics3D()
+void UnsGrid::CalcMetrics3D()
 {
-    this->ComputeFaceNormal3D();
-    this->ComputeFaceCenter3D();
-    this->ComputeCellCenterVol3D();
+    this->CalcFaceNormal3D();
+    this->CalcFaceCenter3D();
+    this->CalcCellCenterVol3D();
 }
 
-void UnsGrid::ComputeFaceCenter1D()
+void UnsGrid::CalcFaceCenter1D()
 {
-    this->faceMesh->ComputeFaceCenter1D( this->nodeMesh );
+    this->faceMesh->CalcFaceCenter1D( this->nodeMesh );
 }
 
-void UnsGrid::ComputeFaceNormal1D()
+void UnsGrid::CalcFaceNormal1D()
 {
-    this->faceMesh->ComputeFaceNormal1D( this->nodeMesh, this->cellMesh );
+    this->faceMesh->CalcFaceNormal1D( this->nodeMesh, this->cellMesh );
 }
 
-void UnsGrid::ComputeCellCenterVol1D()
+void UnsGrid::CalcCellCenterVol1D()
 {
     UInt nFace = this->faceMesh->GetNFace();
     UInt nBFace = this->faceMesh->GetNBFace();
@@ -555,7 +555,7 @@ void UnsGrid::ComputeCellCenterVol1D()
     }
 }
 
-void UnsGrid::ComputeGhostCellCenterVol1D()
+void UnsGrid::CalcGhostCellCenterVol1D()
 {
     UInt nFace = this->faceMesh->GetNFace();
     UInt nBFace = this->faceMesh->GetNBFace();
@@ -604,17 +604,17 @@ void UnsGrid::ComputeGhostCellCenterVol1D()
     }
 }
 
-void UnsGrid::ComputeFaceNormal2D()
+void UnsGrid::CalcFaceNormal2D()
 {
-    this->faceMesh->ComputeFaceNormal2D( this->nodeMesh );
+    this->faceMesh->CalcFaceNormal2D( this->nodeMesh );
 }
 
-void UnsGrid::ComputeFaceCenter2D()
+void UnsGrid::CalcFaceCenter2D()
 {
-    this->faceMesh->ComputeFaceCenter2D( this->nodeMesh );
+    this->faceMesh->CalcFaceCenter2D( this->nodeMesh );
 }
 
-void UnsGrid::ComputeCellCenterVol2D()
+void UnsGrid::CalcCellCenterVol2D()
 {
     UInt nFace = this->faceMesh->GetNFace();
     UInt nBFace = this->faceMesh->GetNBFace();
@@ -727,7 +727,7 @@ void UnsGrid::ComputeCellCenterVol2D()
     }
 }
 
-void UnsGrid::ComputeCellCenterVol3D()
+void UnsGrid::CalcCellCenterVol3D()
 {
     UInt nFace = this->faceMesh->GetNFace();
     UInt nBFace = this->faceMesh->GetNBFace();
@@ -796,6 +796,11 @@ void UnsGrid::ComputeCellCenterVol3D()
             trix *= tmp;
             triy *= tmp;
             triz *= tmp;
+
+            if ( lc == 1174 || rc == 1174 )
+            {
+                int kkk = 1;
+            }
 
             xcc[ lc ] += trix;
             ycc[ lc ] += triy;
@@ -867,14 +872,14 @@ void UnsGrid::ComputeCellCenterVol3D()
     }
 }
 
-void UnsGrid::ComputeFaceNormal3D()
+void UnsGrid::CalcFaceNormal3D()
 {
-    this->faceMesh->ComputeFaceNormal3D( this->nodeMesh );
+    this->faceMesh->CalcFaceNormal3D( this->nodeMesh );
 }
 
-void UnsGrid::ComputeFaceCenter3D()
+void UnsGrid::CalcFaceCenter3D()
 {
-    this->faceMesh->ComputeFaceCenter3D( this->nodeMesh );
+    this->faceMesh->CalcFaceCenter3D( this->nodeMesh );
 }
 
 EndNameSpace

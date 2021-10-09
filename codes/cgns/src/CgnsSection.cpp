@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -119,6 +119,15 @@ void CgnsSection::ReadCgnsSection()
     this->SetElemPosition();
 }
 
+
+void CgnsSection::SetSectionInfo( const string & sectionName, int elemType, int startId, int endId )
+{
+    this->sectionName = sectionName;
+    this->eType = elemType;
+    this->startId = startId;
+    this->endId = endId;
+}
+
 void CgnsSection::ReadCgnsSectionInfo()
 {
     int fileId = cgnsZone->cgnsBase->fileId;
@@ -147,19 +156,19 @@ void CgnsSection::ReadCgnsSectionInfo()
 
 void CgnsSection::CreateConnList()
 {
-    this->ComputeNumberOfSectionElements();
+    this->CalcNumberOfSectionElements();
 
-    this->ComputeCapacityOfCgnsConnectionList();
+    this->CalcCapacityOfCgnsConnectionList();
 
     this->AllocateCgnsConnectionList();
 }
 
-void CgnsSection::ComputeNumberOfSectionElements()
+void CgnsSection::CalcNumberOfSectionElements()
 {
     this->nElement = this->endId - this->startId + 1;
 }
 
-void CgnsSection::ComputeCapacityOfCgnsConnectionList()
+void CgnsSection::CalcCapacityOfCgnsConnectionList()
 {
     if ( eType == MIXED ||
          eType == NGON_n ||

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -58,17 +58,17 @@ void UNsLusgs::Init()
     UnsGrid * grid = Zone::GetUnsGrid();
     FaceTopo * faceTopo = grid->faceTopo;
     CellTopo * cellTopo = grid->cellMesh->cellTopo;
-    cellTopo->CmpC2f( faceTopo );
+    cellTopo->CalcC2f( faceTopo );
     ug.Init();
     nslu.Init();
     unsf.Init();
-    this->CmpSpectrum();
+    this->CalcSpectrum();
 }
 
-void UNsLusgs::CmpSpectrum()
+void UNsLusgs::CalcSpectrum()
 {
     UNsSpectrum * unsSpectrum = new UNsSpectrum();
-    unsSpectrum->CmpImplicitSpectrum();
+    unsSpectrum->CalcImplicitSpectrum();
     delete unsSpectrum;
 }
 
@@ -79,7 +79,7 @@ void UNsLusgs::LowerSweep()
     for ( int cId = 0; cId < ug.nCell; ++ cId )
     {
         ug.cId = cId;
-        if ( cId == 1 )
+        if ( cId == 9 )
         {
             int kkk = 1;
         }
@@ -98,7 +98,7 @@ void UNsLusgs::LowerSweep()
         
             this->SolveLowerCell();
 
-            this->CmpLowerChange();
+            this->CalcLowerChange();
         }
 
         this->Update();
@@ -130,7 +130,7 @@ void UNsLusgs::UpperSweep()
 
             this->SolveUpperCell();
 
-            this->CmpUpperChange();
+            this->CalcUpperChange();
         }
 
         this->Update();
@@ -213,7 +213,7 @@ void UNsLusgs::Solve( int fId, int signValue )
 
     this->GetStandardFluxIncrement( signValue );
 
-    this->ComputeViscousTerm();
+    this->CalcViscousTerm();
 
     this->AddFluxIncrement();
 }
@@ -292,7 +292,7 @@ void UNsLusgs::PrepareDataFacePrim()
     }
 }
 
-void UNsLusgs::ComputeViscousTerm()
+void UNsLusgs::CalcViscousTerm()
 {
     if ( vis_model.vismodel == 0 ) return;
 

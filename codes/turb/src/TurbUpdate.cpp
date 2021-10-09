@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,7 +38,7 @@ TurbUpdate::~TurbUpdate()
 {
 }
 
-void TurbUpdate::CmpFlowField2Equ()
+void TurbUpdate::CalcFlowField2Equ()
 {
     for ( int iEqu = 0; iEqu < turbcom.nEqu; ++ iEqu )
     {
@@ -55,7 +55,7 @@ void TurbUpdate::CmpFlowField2Equ()
     }
 }
 
-void TurbUpdate::CmpFlowField1Equ()
+void TurbUpdate::CalcFlowField1Equ()
 {
     for ( int iEqu = 0; iEqu < turbcom.nEqu; ++ iEqu )
     {

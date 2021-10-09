@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -50,6 +50,7 @@ License
 #include "UResidual.h"
 #include "UNsCom.h"
 #include "TaskRegister.h"
+#include "UINsCom.h"
 #include <map>
 #include <iostream>
 using namespace std;
@@ -65,6 +66,10 @@ void RegisterRestartTask()
     REGISTER_DATA_CLASS( DumpRestart );
     REGISTER_DATA_CLASS( InitRestart );
     REGISTER_DATA_CLASS( InitFlowField );
+
+	//REGISTER_DATA_CLASS( ReadinsRestart );
+	//REGISTER_DATA_CLASS( DumpinsRestart );
+	REGISTER_DATA_CLASS( InitinsRestart );
 }
 
 void InitFirst( StringField & data )
@@ -103,6 +108,16 @@ void InitRestart( StringField & data )
     delete restart;
 }
 
+void InitinsRestart( StringField & data )
+{
+	int sTid = SolverState::tid;
+
+	Restart * restart = CreateRestart( sTid );
+	restart->InitinsRestart( sTid );
+	delete restart;
+}
+
+
 void InitFlowField( StringField & data )
 {
     ONEFLOW::AddCmdToList( "INIT_FIRST" );
@@ -113,12 +128,26 @@ void InitFlowField( StringField & data )
     {
         ONEFLOW::AddCmdToList( "INIT_RESTART" );
     }
-    else
-    {
-        ONEFLOW::AddCmdToList( "READ_RESTART" );
-    }
+	else if ( startStrategy == 2 )
+	{
+		ONEFLOW::AddCmdToList("INIT_INSRESTART");
+	}
+
+	else
+	{
+		ONEFLOW::AddCmdToList("READ_RESTART");
+	}
+	//else if ( startStrategy == 2 )
+	//{
+	//	ONEFLOW::AddCmdToList("INIT_INSRESTART");
+	//}
+	//else if ( startStrategy == 3 )
+    //{
+     //   ONEFLOW::AddCmdToList( "READ_INSRESTART" );
+    //}
 
     ONEFLOW::AddCmdToList( "INIT_FINAL" );
 }
+
 
 EndNameSpace

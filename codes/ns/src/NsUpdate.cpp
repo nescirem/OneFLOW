@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -37,7 +37,7 @@ NsUpdate::~NsUpdate()
 {
 }
 
-void NsUpdate::CmpFlowField()
+void NsUpdate::CalcFlowField()
 {
     PrimToQ( nscom.prim0, nscom.gama, nscom.q0 );
 
@@ -66,7 +66,7 @@ void NsUpdate::CmpFlowField()
     }
 }
 
-void NsUpdate::CmpFlowFieldHyperSonic()
+void NsUpdate::CalcFlowFieldHyperSonic()
 {
     PrimToQ( nscom.prim0, nscom.gama, nscom.q0 );
 
@@ -130,7 +130,7 @@ void NsUpdate::CmpFlowFieldHyperSonic()
     }
 }
 
-void NsUpdate::CmpFlowFieldHyperSonic_Temperature()
+void NsUpdate::CalcFlowFieldHyperSonic_Temperature()
 {
     PrimToQ( nscom.prim0, nscom.gama, nscom.q0 );
 

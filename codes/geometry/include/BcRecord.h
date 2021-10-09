@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -40,8 +40,7 @@ public:
     ~BcInfo();
 public:
     LinkField bcFace;
-    LinkField bcRegion;
-    LinkField bcdtkey;
+    LinkField bcNameId;
     IntField bcType;
 public:
     UInt GetNBcRegion() { return bcType.size(); }
@@ -54,17 +53,16 @@ public:
     ~BcRecord();
 public:
     IntField bcType;
-    IntField bcdtkey;
-    IntField bcRegion;
+    IntField bcNameId;
     BcInfo * bcInfo;
 public:
     void Init( UInt nBFace );
     int GetNBFace();
-    int ComputeNIFace();
-    int CmpNumWallFace();
+    int CalcNIFace();
+    int CalcNumWallFace();
     void CreateI2B( InterFace * interFace );
 public:
-    void CreateBcRegion();
+    void CreateBcTypeRegion();
 };
 
 class IFaceLink;
@@ -91,7 +89,7 @@ public:
     void PreProcess();
     bool ExistInterface();
     void Update();
-    void CmpBcType( IntField & bcTypeList );
+    void CalcBcType( IntField & bcTypeList );
 };
 
 class BasicRegion
@@ -103,7 +101,35 @@ public:
     int start[ 3 ], end[ 3 ];
     int lr[ 3 ];     //左右边界-1, 1对应于左右边界
 public:
+    void SetRegion( int ist, int ied, int jst, int jed );
     void SetRegion( int ist, int ied, int jst, int jed, int kst, int ked );
+};
+
+class BasicRegion;
+class TestRegion
+{
+public:
+    TestRegion();
+    ~TestRegion();
+    int p1[ 3 ], p2[ 3 ];
+    int a[ 3 ];
+    int sign[ 3 ];
+public:
+    void Run( BasicRegion * r, int dimension );
+};
+
+class BcRegion;
+class TestRegionM
+{
+public:
+    TestRegionM();
+    ~TestRegionM();
+public:
+    int dimension;
+    TestRegion s, t;
+    int itransform[ 3 ];
+public:
+    void Run( BcRegion * bcRegion, int dimension );
 };
 
 class BcRegion
@@ -113,14 +139,14 @@ public:
     ~BcRegion();
 public:
     int rid;                         //region id
-    int    bcType;                         //boundary type
+    int bcType;                      //boundary type
     string regionName;               //boundary name
 public:
     BasicRegion * s;
     BasicRegion * t;
 public:
     void GetNormalizeIJKRegion( int & ist, int & ied, int & jst, int & jed, int & kst, int & ked );
-    int ComputeRegionCells();
+    int CalcRegionCells();
 };
 
 class BcRegionGroup
@@ -134,6 +160,7 @@ public:
     HXVector< BcRegion * > * regions;
     void Create( int nBcRegions );
     void SetBcRegion( int ir, BcRegion * bcRegion );
+    BcRegion * GetBcRegion( int ir );
 };
 
 EndNameSpace

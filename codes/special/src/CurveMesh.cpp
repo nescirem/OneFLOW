@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -79,8 +79,8 @@ void CurveMesh::GenerateCurveMesh()
     * ptList[ st ] = * pt1;
     * ptList[ ed ] = * pt2;
 
-    this->ComputeCurveGeometry();
-    segmentCtrl->ComputeFactor();
+    this->CalcCurveGeometry();
+    segmentCtrl->CalcFactor();
 
     for ( int iPoint = 1; iPoint < segmentCtrl->nPoint - 1; ++ iPoint )
     {
@@ -90,7 +90,7 @@ void CurveMesh::GenerateCurveMesh()
         Real s = this->segmentCtrl->lenth * factor;
 
         Real xt, yt, zt;
-        this->ComputeCoor( s, xt, yt, zt );
+        this->CalcCoor( s, xt, yt, zt );
 
         ptList[ idx ]->x = xt;
         ptList[ idx ]->y = yt;

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
 OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
 This file is part of OneFLOW.
@@ -43,7 +43,7 @@ public:
     ~TurbCom();
 public:
     bool init_flag;
-    int nEqu;
+    int nEqu, nTEqu;
     Real visl1, visl2;
     Real vist1, vist2;
     Real visl, vist, vis;
@@ -162,30 +162,30 @@ public:
     void Init();
     void InitConst();
     void InitInflow();
-    void CmpSigkw();
-    void CmpWorkVar();
-    void CmpSaProd();
-    void CmpVGrad();
-    void CmpProdk();
-    void CmpDissk();
+    void CalcSigkw();
+    void CalcWorkVar();
+    void CalcSaProd();
+    void CalcVGrad();
+    void CalcProdk();
+    void CalcDissk();
     void LimitProdk();
-    void CmpProdwKwMenter();
-    void CmpProdwKwWilcox1998();
-    void CmpProdwKwWilcox2006();
-    void CmpProdwKwDefault();
-    void CmpProdwEasmKw2003();
-    void CmpProdwEasmKw2005();
+    void CalcProdwKwMenter();
+    void CalcProdwKwWilcox1998();
+    void CalcProdwKwWilcox2006();
+    void CalcProdwKwDefault();
+    void CalcProdwEasmKw2003();
+    void CalcProdwEasmKw2005();
     void ModifyPd();
-    void CmpSrc();
-    void CmpCrossDiff();
-    void CmpCdkwmin();
-    void CmpCellBlendingTerm();
-    void CmpCrossing();
-    void CmpFbetaOfKwWilcox1998();
-    void CmpFbetaOfKwWilcox2006();
-    void CmpFbetaOfEasmKw2003();
+    void CalcSrc();
+    void CalcCrossDiff();
+    void CalcCdkwmin();
+    void CalcCellBlendingTerm();
+    void CalcCrossing();
+    void CalcFbetaOfKwWilcox1998();
+    void CalcFbetaOfKwWilcox2006();
+    void CalcFbetaOfEasmKw2003();
     void RGamaTransition();
-    void CmpSrcSa();
+    void CalcSrcSa();
 };
 
 extern TurbCom turbcom;

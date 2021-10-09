@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -44,7 +44,7 @@ public:
     USDFunc criFun;
     int sTid;
 public:
-    virtual void CmpUnsteadyCriterion() {};
+    virtual void CalcUnsteadyCriterion() {};
     void UpdateUnsteady( int sTid );
 };
 

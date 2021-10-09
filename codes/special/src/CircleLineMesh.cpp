@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -43,7 +43,7 @@ void CircleLineMesh::GenerateLineMesh()
     ;
 }
 
-void CircleLineMesh::ComputeCurveGeometry()
+void CircleLineMesh::CalcCurveGeometry()
 {
     PointType * pt1 = point_Machine.GetPoint( this->curveInfo->p1 );
     PointType * pt2 = point_Machine.GetPoint( this->curveInfo->p2 );
@@ -89,7 +89,7 @@ void CircleLineMesh::ComputeCurveGeometry()
     this->segmentCtrl->lenth = radius * ( alpha1 - alpha0 );
 }
 
-void CircleLineMesh::ComputeCoor( Real s, Real & xt, Real & yt, Real & zt )
+void CircleLineMesh::CalcCoor( Real s, Real & xt, Real & yt, Real & zt )
 {
     PointType * pt1 = point_Machine.GetPoint( this->curveInfo->p1 );
     PointType * pt2 = point_Machine.GetPoint( this->curveInfo->p2 );

@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -153,7 +153,7 @@ bool TurbLusgs::UpdateSweep( int iSweep )
     return false;
 }
 
-void TurbLusgs::CmpLowerChange()
+void TurbLusgs::CalcLowerChange()
 {
     if ( turblu.numberOfSweeps > 1 )
     {
@@ -203,7 +203,7 @@ void TurbLusgs::CmpLowerChange()
     }
 }
 
-void TurbLusgs::CmpUpperChange()
+void TurbLusgs::CalcUpperChange()
 {
     if ( turblu.numberOfSweeps > 1 )
     {

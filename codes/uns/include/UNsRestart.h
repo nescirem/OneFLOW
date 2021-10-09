@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -32,6 +32,22 @@ public:
     ~UNsRestart();
 public:
     void InitRestart( int sTid );
+};
+
+class ShockVertex
+{
+public:
+    ShockVertex();
+    ~ShockVertex();
+public:
+    Real xc, yc;
+    Real Ms, gama;
+    Real ru, uu, vu, pu;
+    Real rd, ud, vd, pd;
+public:
+    void Init();
+    Real vortexfun( Real x, Real y, Real gama );
+    void Cal( Real x, Real y, Real gama, Real & vx, Real & vy );
 };
 
 EndNameSpace

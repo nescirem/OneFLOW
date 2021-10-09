@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -22,11 +22,14 @@ License
 
 #include "BcRecord.h"
 #include "Boundary.h"
+#include "Dimension.h"
 #include "InterFace.h"
 #include "IFaceLink.h"
 #include "FaceSearch.h"
 #include "HXMath.h"
 #include "HXStd.h"
+#include <iostream>
+using namespace std;
 
 BeginNameSpace( ONEFLOW )
 
@@ -50,47 +53,48 @@ BcRecord::~BcRecord()
     delete bcInfo;
 }
 
-void BcRecord::CreateBcRegion()
+void BcRecord::CreateBcTypeRegion()
 {
     if ( bcInfo ) return;
     this->bcInfo = new BcInfo();
 
     IntSet bcTypeSet;
     IntSet bcUserTypeSet;
+    IntSet bcRegionNameSet;
 
     int nBFace = this->GetNBFace();
 
     for ( int iFace = 0; iFace < nBFace; ++ iFace )
     {
         int bcType = this->bcType[ iFace ];
-        int bcRegion = this->bcRegion[ iFace ];
+        int bcNameId = this->bcNameId[ iFace ];
         bcTypeSet.insert( bcType );
+        bcRegionNameSet.insert( bcNameId );
         if ( bcType == BC::GENERIC_2 )
         {
-            bcUserTypeSet.insert( bcRegion );
+            bcUserTypeSet.insert( bcNameId );
         }
     }
+    //cout << " bcTypeSet.size() = " << bcTypeSet.size() << "\n";
+    //cout << " bcRegionNameSet.size() = " << bcRegionNameSet.size() << "\n";
 
     ONEFLOW::Set2Array( bcTypeSet, bcInfo->bcType );
 
-    int nRegion = bcInfo->bcType.size();
-    bcInfo->bcFace.resize( nRegion );
-    bcInfo->bcRegion.resize( nRegion );
-    bcInfo->bcdtkey.resize( nRegion );
+    int nBcTypeRegions = bcInfo->bcType.size();
+    bcInfo->bcFace.resize( nBcTypeRegions );
+    bcInfo->bcNameId.resize( nBcTypeRegions );
 
-    for ( int ir = 0; ir < nRegion; ++ ir )
+    for ( int iBcTypeRegion = 0; iBcTypeRegion < nBcTypeRegions; ++ iBcTypeRegion )
     {
-        int targetBcType = bcInfo->bcType[ ir ];
+        int targetBcType = bcInfo->bcType[ iBcTypeRegion ];
         for ( int iFace = 0; iFace < nBFace; ++ iFace )
         {
             int bcType = this->bcType[ iFace ];
-            int bcdtkey = this->bcdtkey[ iFace ];
             if ( bcType == targetBcType )
             {
-                int bcRegion = this->bcRegion[ iFace ];
-                bcInfo->bcFace[ ir ].push_back( iFace );
-                bcInfo->bcRegion[ ir ].push_back( bcRegion );
-                bcInfo->bcdtkey[ ir ].push_back( bcdtkey );
+                int bcNameId = this->bcNameId[ iFace ];
+                bcInfo->bcFace[ iBcTypeRegion ].push_back( iFace );
+                bcInfo->bcNameId[ iBcTypeRegion ].push_back( bcNameId );
             }
         }
     }
@@ -105,11 +109,10 @@ int BcRecord::GetNBFace()
 void BcRecord::Init( UInt nBFace )
 {
     this->bcType.resize( nBFace );
-    this->bcdtkey.resize( nBFace );
-    this->bcRegion.resize( nBFace );
+    this->bcNameId.resize( nBFace );
 }
 
-int BcRecord::ComputeNIFace()
+int BcRecord::CalcNIFace()
 {
     int nBFace = this->GetNBFace();
 
@@ -125,7 +128,7 @@ int BcRecord::ComputeNIFace()
     return nIFace;
 }
 
-int BcRecord::CmpNumWallFace()
+int BcRecord::CalcNumWallFace()
 {
     int nBFace = this->GetNBFace();
 
@@ -201,7 +204,7 @@ void BcManager::Update()
     this->bcFlag = 1;
 }
 
-void BcManager::CmpBcType( IntField & bcTypeList )
+void BcManager::CalcBcType( IntField & bcTypeList )
 {
     IntSet bcTypeSet;
 
@@ -219,6 +222,16 @@ void BcManager::CmpBcType( IntField & bcTypeList )
     }
 }
 
+void BasicRegion::SetRegion( int ist, int ied, int jst, int jed )
+{
+    this->start[ 0 ] = ist;
+    this->end  [ 0 ] = ied;
+    this->start[ 1 ] = jst;
+    this->end  [ 1 ] = jed;
+    this->start[ 2 ] = 1;
+    this->end  [ 2 ] = 1;
+}
+
 void BasicRegion::SetRegion( int ist, int ied, int jst, int jed, int kst, int ked )
 {
     this->start[ 0 ] = ist;
@@ -227,6 +240,103 @@ void BasicRegion::SetRegion( int ist, int ied, int jst, int jed, int kst, int ke
     this->end  [ 1 ] = jed;
     this->start[ 2 ] = kst;
     this->end  [ 2 ] = ked;
+}
+
+TestRegion::TestRegion()
+{
+    ;
+}
+
+TestRegion::~TestRegion()
+{
+    ;
+}
+
+void TestRegion::Run( BasicRegion * r, int dimension ) 
+{
+    int n = dimension;
+    for ( int i = 0; i < n; ++ i )
+    {
+        p1[ i ] = r->start[ i ];
+        p2[ i ] = r->end[ i ];
+    }
+
+    for ( int i = 0; i < n; ++ i )
+    {
+        if ( p1[ i ] == p2[ i ] )
+        {
+            a[ i ] = 0;
+        }
+        else
+        {
+            if ( dimension == THREE_D )
+            {
+                if ( p1[ i ] > 0 )
+                {
+                    a[ i ] = 1;
+                }
+                else
+                {
+                    a[ i ] = 2;
+                }
+            }
+            else
+            {
+                a[ i ] = 1;
+            }
+        }
+    }
+
+    for ( int i = 0; i < n; ++ i )
+    {
+        sign[ i ] = 1;
+        if ( ABS( p1[ i ] ) > ABS( p2[ i ] ) )
+        {
+            sign[ i ] = - 1;
+        }
+    }
+
+    for ( int m = 0; m < n; ++ m )
+    {
+        int aa = MIN( ABS( p1[ m ] ), ABS( p2[ m ] ) );
+        int bb = MAX( ABS( p1[ m ] ), ABS( p2[ m ] ) );
+        p1[ m ] = aa;
+        p2[ m ] = bb;
+    }
+}
+
+TestRegionM::TestRegionM()
+{
+    ;
+}
+
+TestRegionM::~TestRegionM()
+{
+    ;
+}
+
+void TestRegionM::Run( BcRegion * bcRegion, int dimension )
+{
+    s.Run( bcRegion->s, dimension );
+    t.Run( bcRegion->t, dimension );
+
+    for ( int i = 0; i < 3; ++ i )
+    {
+        itransform[ i ] = ( i + 1 );
+    }
+
+    for ( int i = 0; i < dimension; ++ i )
+    {
+        int v = s.a[ i ];
+        for ( int j = 0; j < dimension; ++ j )
+        {
+            if ( s.a[ i ] == t.a[ j ] )
+            {
+                int sign = s.sign[ i ] * t.sign[ j ];
+                itransform[ i ] = ( j + 1 ) * sign;
+            }
+        }
+    }
 }
 
 BcRegion::BcRegion( int zid, int rid )
@@ -254,7 +364,7 @@ void BcRegion::GetNormalizeIJKRegion( int & ist, int & ied, int & jst, int & jed
     ked = MAX( ABS( this->s->start[ 2 ] ), ABS( this->s->end[ 2 ] ) );
 }
 
-int BcRegion::ComputeRegionCells()
+int BcRegion::CalcRegionCells()
 {
     int imin, imax, jmin, jmax, kmin, kmax;
     this->GetNormalizeIJKRegion( imin, imax, jmin, jmax, kmin, kmax );
@@ -294,6 +404,11 @@ void BcRegionGroup::Create( int nBcRegions )
 void BcRegionGroup::SetBcRegion( int ir, BcRegion * bcRegion )
 {
     ( * regions )[ ir ] = bcRegion;
+}
+
+BcRegion *  BcRegionGroup::GetBcRegion( int ir )
+{
+    return ( * regions )[ ir ];
 }
 
 EndNameSpace

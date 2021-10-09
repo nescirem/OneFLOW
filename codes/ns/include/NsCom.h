@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -28,12 +28,6 @@ License
 
 BeginNameSpace( ONEFLOW )
 
-const int INVISCID  = 0;
-const int LAMINAR   = 1;
-const int ALGEBRAIC = 2;
-const int ONE_EQU   = 3;
-const int TWO_EQU   = 4;
-
 class NsCom
 {
 public:
@@ -49,7 +43,7 @@ public:
     int nSpecies;
     int visSRModel;
     int timestepModel;
-    int visTimestepModel;
+    int visTimeStepModel;
     int chemModel;
     int nTModel;
     int bctype;
@@ -136,9 +130,9 @@ public:
     Real vissr; //viscous  spectrum radius;
     Real dt;
     Real timestep;
-    Real minTimestep;
+    Real minTimeStep;
     Real max_time_ratio;
-    Real physicalTimestep;
+    Real physicalTimeStep;
 };
 
 extern NsCom nscom;

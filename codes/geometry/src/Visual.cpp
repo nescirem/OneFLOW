@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -74,7 +74,7 @@ void Visual::DumpTitle( fstream & file, Mesh * mesh )
         file << titleOfTecplot[ i ] << endl;
     }
 
-    UInt totalNumFaceNodes = mesh->faceMesh->ComputeTotalFaceNodes();
+    UInt totalNumFaceNodes = mesh->faceMesh->CalcTotalFaceNodes();
     UInt nFace = mesh->faceMesh->GetNFace();
     UInt numberOfNodes = mesh->nodeMesh->GetNumberOfNodes();
     UInt numberOfCells = mesh->cellMesh->GetNumberOfCells();

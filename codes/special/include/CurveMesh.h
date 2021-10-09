@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -47,8 +47,8 @@ public:
 public:
     int GetDim() { return ptList.size(); };
     virtual void GenerateLineMesh() {};
-    virtual void ComputeCurveGeometry() {};
-    virtual void ComputeCoor( Real s, Real & xt, Real & yt, Real & zt ) {};
+    virtual void CalcCurveGeometry() {};
+    virtual void CalcCoor( Real s, Real & xt, Real & yt, Real & zt ) {};
 };
 
 void Alloc( RealField2D & field, int ni, int nj );

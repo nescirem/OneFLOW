@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -46,22 +46,22 @@ Grad::~Grad()
     ;
 }
 
-void Grad::CmpGrad()
+void Grad::CalcGrad()
 {
     for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
     {
-        //ONEFLOW::CmpGrad( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
-        ONEFLOW::CmpGradGGCellWeight( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
+        //ONEFLOW::CalcGrad( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
+        ONEFLOW::CalcGradGGCellWeight( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
     }
 
     this->SwapBcGrad();
 }
 
-void Grad::CmpGradDebug()
+void Grad::CalcGradDebug()
 {
     for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
     {
-        ONEFLOW::CmpGradDebug( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
+        ONEFLOW::CalcGradDebug( ( * q )[ iEqu ], ( * dqdx )[ iEqu ], ( * dqdy )[ iEqu ], ( * dqdz )[ iEqu ] );
     }
 
     this->SwapBcGrad();

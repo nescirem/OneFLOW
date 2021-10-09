@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -54,10 +54,13 @@ public:
     void PeriodicBc         ();
     void VelocityBc();
 public:
-    void CmpFaceBc();
-    Real CmpReciMolecularWeight( RealField & prim );
-    Real CmpDensity( RealField & prim, Real pres, Real temperature );
+    void CalcFaceBc();
+    Real CalcReciMolecularWeight( RealField & prim );
+    Real CalcDensity( RealField & prim, Real pres, Real temperature );
 };
+
+class BcData;
+extern BcData bcdata;
 
 
 

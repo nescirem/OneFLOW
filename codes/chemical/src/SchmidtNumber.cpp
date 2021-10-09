@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -47,7 +47,7 @@ void SchmidtNumber::Init( int nSpecies )
     oturbSchmidt.resize( nSpecies );
 }
 
-void SchmidtNumber::ComputeSchmidtNumber( IntField & ionType )
+void SchmidtNumber::CalcSchmidtNumber( IntField & ionType )
 {
     for ( int iSpecies = 0; iSpecies < nSpecies; ++ iSpecies )
     {

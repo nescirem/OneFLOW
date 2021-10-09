@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -54,17 +54,17 @@ UNsInvFlux::~UNsInvFlux()
     delete limiter;
 }
 
-void UNsInvFlux::CmpLimiter()
+void UNsInvFlux::CalcLimiter()
 {
-    limiter->CmpLimiter();
+    limiter->CalcLimiter();
 }
 
-void UNsInvFlux::CmpInvFace()
+void UNsInvFlux::CalcInvFace()
 {
     uns_grad.Init();
-    uns_grad.CmpGrad();
+    uns_grad.CalcGrad();
 
-    this->CmpLimiter();
+    this->CalcLimiter();
 
     this->GetQlQrField();
 
@@ -80,8 +80,8 @@ void UNsInvFlux::GetQlQrField()
 
 void UNsInvFlux::ReconstructFaceValueField()
 {
-    limf->CmpFaceValue();
-    //limf->CmpFaceValueWeighted();
+    limf->CalcFaceValue();
+    //limf->CalcFaceValueWeighted();
 }
 
 void UNsInvFlux::BoundaryQlQrFixField()
@@ -89,7 +89,7 @@ void UNsInvFlux::BoundaryQlQrFixField()
     limf->BcQlQrFix();
 }
 
-void UNsInvFlux::CmpFlux()
+void UNsInvFlux::CalcFlux()
 {
     if ( nscom.icmpInv == 0 ) return;
     inv.Init();
@@ -100,14 +100,14 @@ void UNsInvFlux::CmpFlux()
     this->SetPointer( nscom.ischeme );
 
     //ReadTmp();
-    this->CmpInvFace();
-    this->CmpInvFlux();
+    this->CalcInvFace();
+    this->CalcInvFlux();
     this->AddInvFlux();
 
     DeAlloc();
 }
 
-void UNsInvFlux::CmpInvFlux()
+void UNsInvFlux::CalcInvFlux()
 {
     if ( Iteration::outerSteps == 2 )
     {
@@ -117,6 +117,11 @@ void UNsInvFlux::CmpInvFlux()
     for ( int fId = 0; fId < ug.nFace; ++ fId )
     {
         ug.fId = fId;
+
+        if ( fId == 433 )
+        {
+            int kkk = 1;
+        }
 
         ug.lc = ( * ug.lcf )[ ug.fId ];
         ug.rc = ( * ug.rcf )[ ug.fId ];

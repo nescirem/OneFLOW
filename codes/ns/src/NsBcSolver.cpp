@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -22,6 +22,7 @@ License
 
 #include "NsBcSolver.h"
 #include "BcData.h"
+#include "FlowModel.h"
 #include "NsCom.h"
 #include "UCom.h"
 #include "NsCtrl.h"
@@ -33,6 +34,8 @@ License
 using namespace std;
 
 BeginNameSpace( ONEFLOW )
+
+BcData bcdata;
 
 NsBcSolver::NsBcSolver()
 {
@@ -122,7 +125,7 @@ void NsBcSolver::SetSolidSurfaceBc()
     }
 }
 
-void NsBcSolver::CmpFaceBc()
+void NsBcSolver::CalcFaceBc()
 {
     ( this->* bcPointer )();
 }
@@ -282,7 +285,7 @@ void NsBcSolver::IsothermalVisWallBc()
     Real pm = nscom.prims1[ IDX::IP ];
     Real temperature = nscom.ts1[ IDX::ITT ];
 
-    Real rw_face = this->CmpDensity( nscom.prims1, pm, nscom.twall );
+    Real rw_face = this->CalcDensity( nscom.prims1, pm, nscom.twall );
     nscom.prim[ IDX::IR ] = rw_face;
     nscom.prim[ IDX::IU ] = 0.0;
     nscom.prim[ IDX::IV ] = 0.0;
@@ -298,7 +301,7 @@ void NsBcSolver::IsothermalVisWallBc()
     }
 
     Real rg1;
-    Real rw = this->CmpDensity( nscom.prims1, pg1, nscom.twall );
+    Real rw = this->CalcDensity( nscom.prims1, pg1, nscom.twall );
 
     rg1 = 2.0 * rw - rm;
     rg1 = MAX( 0.5 * rw, rg1 );
@@ -319,7 +322,7 @@ void NsBcSolver::IsothermalVisWallBc()
 
     if ( tg2 < tlim ) tg2 = tlim;
 
-    rg2 = this->CmpDensity( nscom.prims2, pg2, tg2 );
+    rg2 = this->CalcDensity( nscom.prims2, pg2, tg2 );
 
     nscom.primt2[ IDX::IR ] = rg2;
 }
@@ -413,15 +416,15 @@ void NsBcSolver::PeriodicBc()
 }
 
 
-Real NsBcSolver::CmpReciMolecularWeight( RealField & prim )
+Real NsBcSolver::CalcReciMolecularWeight( RealField & prim )
 {
     Real reciprocalAverageMolecularWeight = one;
     return reciprocalAverageMolecularWeight;
 }
 
-Real NsBcSolver::CmpDensity( RealField & prim, Real pres, Real temperature )
+Real NsBcSolver::CalcDensity( RealField & prim, Real pres, Real temperature )
 {
-    Real rmw = this->CmpReciMolecularWeight( prim );
+    Real rmw = this->CalcReciMolecularWeight( prim );
     Real density = pres / ( nscom.statecoef * temperature * rmw );
     return density;
 }

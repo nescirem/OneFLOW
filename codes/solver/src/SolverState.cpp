@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -124,7 +124,7 @@ bool SolverState::Converge()
     for ( int iSolver = 0; iSolver < SolverState::nSolver; ++ iSolver )
     {
         SolverState::id = iSolver;
-        ONEFLOW::SsSgTask( "CMP_UNSTEADY_CRITERION" );
+        ONEFLOW::SsSgTask( "CALC_UNSTEADY_CRITERION" );
     }
     
     return flag;

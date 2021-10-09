@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -20,6 +20,7 @@ License
 
 \*---------------------------------------------------------------------------*/
 #include "SimpleSimu.h"
+#include "Scalar.h"
 #include <iostream>
 using namespace std;
 
@@ -42,6 +43,9 @@ void SimpleSimu::ProcessCmdLineArgs( std::vector<std::string> &args )
 void SimpleSimu::Run()
 {
     cout << "SimpleSimu::Run\n";
+    Scalar * scalar = new Scalar();
+    scalar->Run();
+    delete scalar;
 }
 
 

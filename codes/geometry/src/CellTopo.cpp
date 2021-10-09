@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -92,7 +92,7 @@ void CellTopo::PushElement( int p1, int p2, int p3, int p4, int elementType )
     }
 }
 
-void CellTopo::CmpC2f( FaceTopo * faceTopo )
+void CellTopo::CalcC2f( FaceTopo * faceTopo )
 {
     if ( c2f.size() != 0 ) return;
 
@@ -117,23 +117,23 @@ void CellTopo::CmpC2f( FaceTopo * faceTopo )
     }
 }
 
-void CellTopo::CmpC2C( FaceTopo * faceTopo )
+void CellTopo::CalcC2C( FaceTopo * faceTopo )
 {
-    faceTopo->CmpC2C( this->c2c );
+    faceTopo->CalcC2C( this->c2c );
 }
 
-void CmpC2f( UnsGrid * grid )
+void CalcC2f( UnsGrid * grid )
 {
     FaceTopo * faceTopo = grid->faceTopo;
     CellTopo * cellTopo = grid->cellMesh->cellTopo;
-    cellTopo->CmpC2f( faceTopo );
+    cellTopo->CalcC2f( faceTopo );
 }
 
-void CmpC2C( UnsGrid * grid )
+void CalcC2C( UnsGrid * grid )
 {
     FaceTopo * faceTopo = grid->faceTopo;
     CellTopo * cellTopo = grid->cellMesh->cellTopo;
-    cellTopo->CmpC2C( faceTopo );
+    cellTopo->CalcC2C( faceTopo );
 }
 
 EndNameSpace

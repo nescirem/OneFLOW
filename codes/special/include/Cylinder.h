@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -72,7 +72,7 @@ public:
     void SetBoundaryGrid();
     void GeneDomain();
 public:
-    void ComputeCircleCenter( PointType & p1, PointType & p2, PointType & p0, PointType & pcenter );
+    void CalcCircleCenter( PointType & p1, PointType & p2, PointType & p0, PointType & pcenter );
 public:
     void DumpGrid( const string & fileName, DomainData * domain );
     void DumpBcFile( const string & fileName, DomainData * domain, IntField & bcList );

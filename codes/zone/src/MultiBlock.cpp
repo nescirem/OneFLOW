@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
 OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
 This file is part of OneFLOW.
@@ -59,7 +59,7 @@ void MultiBlock::ReadMultiBlockGrid()
 void MultiBlock::SetUpMultigrid()
 {
     SolverState::tid = GRID_SOLVER;
-    SsSgTask( "CMP_METRICS" );
+    SsSgTask( "CALC_METRICS" );
 }
 
 void MultiBlock::LoadGridAndBuildLink()
@@ -105,7 +105,7 @@ void CreateWallDist()
 {
     SolverState::tid = GRID_SOLVER;
     SsSgTask( "FILL_WALL_STRUCT" );
-    SsSgTask( "CMP_WALL_DIST" );
+    SsSgTask( "CALC_WALL_DIST" );
     FreeWallStruct();
     SsSgTask( "WRITE_WALL_DIST" );
 }

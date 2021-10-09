@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -29,7 +29,7 @@ BeginNameSpace( ONEFLOW )
 
 DEFINE_DATA_CLASS( FillWallStructTask  );
 DEFINE_DATA_CLASS( FillWallStruct  );
-DEFINE_DATA_CLASS( CmpWallDist );
+DEFINE_DATA_CLASS( CalcWallDist );
 
 class CFillWallStructTaskImp : public Task
 {
@@ -55,6 +55,6 @@ public:
 
 void SetWallTask();
 void FreeWallStruct();
-Real CmpPoint2FaceDist( WallStructure::PointType node, WallStructure::PointField & fvList );
+Real CalcPoint2FaceDist( WallStructure::PointType node, WallStructure::PointField & fvList );
 
 EndNameSpace

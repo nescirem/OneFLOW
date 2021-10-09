@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -48,7 +48,7 @@ MRField * CreateNodeVar( const string & name )
     MRField * nf = AllocNodeVar( nEqu );
     for ( int iEqu = 0; iEqu < nEqu; ++ iEqu )
     {
-        CmpNodeVar( ( * nf )[ iEqu ], ( * cf )[ iEqu ] );
+        CalcNodeVar( ( * nf )[ iEqu ], ( * cf )[ iEqu ] );
     }
     return nf;
 }
@@ -57,11 +57,11 @@ MRField * CreateNodeVar( RealField & qc )
 {
     UnsGrid * grid = Zone::GetUnsGrid();
     MRField * fn = AllocNodeVar( 1 );
-    CmpNodeVar( ( * fn )[ 0 ], qc );
+    CalcNodeVar( ( * fn )[ 0 ], qc );
     return fn;
 }
 
-void CmpNodeVar( RealField & qNodeField, RealField & qField )
+void CalcNodeVar( RealField & qNodeField, RealField & qField )
 {
     UnsGrid * grid = Zone::GetUnsGrid();
     FaceTopo * faceTopo = grid->faceTopo;

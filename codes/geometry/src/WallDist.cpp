@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -63,7 +63,7 @@ void SetWallTask()
 {
     REGISTER_DATA_CLASS( FillWallStructTask  );
     REGISTER_DATA_CLASS( FillWallStruct  );
-    REGISTER_DATA_CLASS( CmpWallDist );
+    REGISTER_DATA_CLASS( CalcWallDist );
 }
 
 void FillWallStructTask( StringField & data )
@@ -78,7 +78,7 @@ void FillWallStruct( StringField & data )
     int nBFace = grid->faceTopo->bcManager->bcRecord->GetNBFace();
     BcRecord * bcRecord = grid->faceTopo->bcManager->bcRecord;
 
-    int nWallFace = bcRecord->CmpNumWallFace();
+    int nWallFace = bcRecord->CalcNumWallFace();
 
     RealField & xfc = grid->faceMesh->xfc;
     RealField & yfc = grid->faceMesh->yfc;
@@ -103,7 +103,7 @@ void FillWallStruct( StringField & data )
     for ( int iFace = 0; iFace < nBFace; ++ iFace )
     {
         int bcType = bcRecord->bcType[ iFace ];
-        int bcRegion = bcRecord->bcRegion[ iFace ];
+        int bcRegion = bcRecord->bcNameId[ iFace ];
         int nNode = grid->faceTopo->f2n[ iFace ].size();
 
         if ( bcType == BC::SOLID_SURFACE )
@@ -133,13 +133,13 @@ void FillWallStruct( StringField & data )
     HXWrite( ActionState::dataBook, fc );
 }
 
-void CmpWallDist( StringField & data )
+void CalcWallDist( StringField & data )
 {
     UnsGrid * grid = Zone::GetUnsGrid();
     int nBFace = grid->faceTopo->bcManager->bcRecord->GetNBFace();
     BcRecord * bcRecord = grid->faceTopo->bcManager->bcRecord;
 
-    int nWallFace = bcRecord->CmpNumWallFace();
+    int nWallFace = bcRecord->CalcNumWallFace();
 
     RealField & dist = grid->cellMesh->dist;
 
@@ -177,7 +177,7 @@ void CmpWallDist( StringField & data )
         {
             WallStructure::PointField  & fvList = fv[ iWFace ];
 
-            Real wdst = CmpPoint2FaceDist( ccp, fvList );
+            Real wdst = CalcPoint2FaceDist( ccp, fvList );
 
             if ( wdst < 1.0e-30 )
             {
@@ -256,7 +256,7 @@ void CFillWallStructTaskImp::FillWall()
     }
 }
 
-Real CmpPoint2FaceDist( WallStructure::PointType node, WallStructure::PointField & fvList )
+Real CalcPoint2FaceDist( WallStructure::PointType node, WallStructure::PointField & fvList )
 {
     using namespace gte;
     Vector< 3, Real > point0;

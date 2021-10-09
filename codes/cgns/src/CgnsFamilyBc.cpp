@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -82,6 +82,13 @@ void CgnsFamilyBc::SetFamilyBc( BCType_t & bcType, const string & bcRegionName )
         int bcTypeFamily = this->GetBcType( bcRegionName );
         bcType = static_cast< BCType_t >( bcTypeFamily );
     }
+}
+
+BCType_t CgnsFamilyBc::GetFamilyBcType( const string & bcFamilyName )
+{
+    int bcTypeOfFamily = this->GetBcType( bcFamilyName );
+    BCType_t bcType = static_cast< BCType_t >( bcTypeOfFamily );
+    return bcType;
 }
 
 void CgnsFamilyBc::ReadFamilySpecifiedBc()

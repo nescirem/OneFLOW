@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,14 +38,14 @@ License
 BeginNameSpace( ONEFLOW )
 
 
-void CreateBcRegion()
-{
-    UnsGrid * grid = Zone::GetUnsGrid();
-    BcRecord * bcRecord = grid->faceTopo->bcManager->bcRecord;
-    bcRecord->CreateBcRegion();
-
-    ug.bcRecord = bcRecord;
-}
+//void CreateBcTypeRegion()
+//{
+//    UnsGrid * grid = Zone::GetUnsGrid();
+//    BcRecord * bcRecord = grid->faceTopo->bcManager->bcRecord;
+//    bcRecord->CreateBcTypeRegion();
+//
+//    ug.bcRecord = bcRecord;
+//}
 
 
 EndNameSpace

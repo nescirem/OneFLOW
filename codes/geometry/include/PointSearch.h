@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -68,7 +68,7 @@ void CreateStandardADTByTolerance( Grids & grids, AdtTree *& adtTree, Real & tol
 
 void ShiftMinMaxBox( RealField & pmin, RealField & pmax, Real tolerance );
 void GetGridsMinMaxDistance( Grids & grids, Real & mindis, Real & maxdis );
-Real ComputeGridTolerance( Grids & grids );
+Real CalcGridTolerance( Grids & grids );
 void GetBoundingBoxOfMultiZoneGrids( Grids & grids, RealField & pmin, RealField & pmax );
 
 EndNameSpace

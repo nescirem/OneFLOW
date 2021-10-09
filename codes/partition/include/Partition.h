@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -55,10 +55,10 @@ public:
     G2LMapping * g2l;
 public:
     void Alloc( UnsGrid * grid );
-    void CmpL2G    ( UnsGrid * ggrid, int zid, UnsGrid * grid );
-    void CmpL2GNode( UnsGrid * ggrid, int zid, UnsGrid * grid );
-    void CmpL2GFace( UnsGrid * ggrid, int zid, UnsGrid * grid );
-    void CmpL2GCell( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcL2G    ( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcL2GNode( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcL2GFace( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcL2GCell( UnsGrid * ggrid, int zid, UnsGrid * grid );
 };
 
 class G2LMapping
@@ -105,20 +105,20 @@ public:
     void GenerateMultiZoneGrid();
     void CreatePart();
     void AllocPart();
-    void BuildCmpGrid();
-    void BuildCmpGrid( int zid );
+    void BuildCalcutationalGrid();
+    void BuildCalcutationalGrid( int zid );
     void PreProcess();
     void PostProcess();
 public:
-    void CmpGC2N();
-    void CmpG2lCell();
-    void CmpG2lFace( UnsGrid * ggrid, int zid, UnsGrid * grid );
-    void CmpG2lNode( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcGC2N();
+    void CalcG2lCell();
+    void CalcG2lFace( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcG2lNode( UnsGrid * ggrid, int zid, UnsGrid * grid );
     int GetNCell( UnsGrid * ggrid, int zid );
     void CreateL2g( UnsGrid * ggrid, int zid, UnsGrid * grid );
     void SetCoor( UnsGrid * ggrid, int zid, UnsGrid * grid );
     void SetGeometricRelationship( UnsGrid * ggrid, int zid, UnsGrid * grid );
-    void CmpF2N( UnsGrid * ggrid, int zid, UnsGrid * grid );
+    void CalcF2N( UnsGrid * ggrid, int zid, UnsGrid * grid );
     void SetF2CAndBC( UnsGrid * ggrid, int zid, UnsGrid * grid );
     void SetInterface( UnsGrid * ggrid, int zid, UnsGrid * grid );
 };

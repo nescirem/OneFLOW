@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,7 +38,7 @@ Stress::~Stress()
     ;
 }
 
-void Stress::CmpStress()
+void Stress::CalcStress()
 {
     Real divv2p3 = two3rd * ( dudx + dvdy + dwdz );
 
@@ -50,9 +50,9 @@ void Stress::CmpStress()
     tyz = viscosity * ( dvdz + dwdy );
 }
 
-void Stress::CmpForce( Force * force )
+void Stress::CalcForce( Force * force )
 {
-    this->CmpStress();
+    this->CalcStress();
 
     Real coef = - two * area * orey;
 

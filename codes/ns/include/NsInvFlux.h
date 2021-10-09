@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -108,10 +108,10 @@ public:
     void ModifyAbsoluteEigenvalue();
 };
 
-void CmpEnthalpy( RealField & prim, Real gama, Real & enthalpy );
-void CmpTotalEnthalpyChange( RealField & prim, Real & gama, RealField & dq, Real & dh );
+void CalcEnthalpy( RealField & prim, Real gama, Real & enthalpy );
+void CalcTotalEnthalpyChange( RealField & prim, Real & gama, RealField & dq, Real & dh );
 void PrimToQ( RealField & prim, Real gama, RealField & q );
 void QToPrim( RealField & q, Real gama, RealField & prim, RealField & temp );
-void CmpInternalEnergy( RealField & prim, Real gama, Real & em );
+void CalcInternalEnergy( RealField & prim, Real gama, Real & em );
 
 EndNameSpace

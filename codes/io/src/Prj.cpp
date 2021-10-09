@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -24,6 +24,8 @@ License
 #include "OStream.h"
 #include "FileUtil.h"
 #include "LogFile.h"
+#include "SimuCtrl.h"
+
 
 #include <iostream>
 using namespace std;
@@ -44,30 +46,16 @@ PrjStatus::~PrjStatus()
 
 void PrjStatus::SetPrjBaseDir( const string & prjName )
 {
-    string baseDir = "./";
-    ONEFLOW::StrIO << baseDir << prjName;
-    if ( ! EndWithForwardSlash( prjName ) )
+    string current_dir_now = RemoveEndSlash( SimuCtrl::current_dir );
+    string prj_name_now = RemoveFirstSlash( prjName );
+    ONEFLOW::StrIO << current_dir_now << "/" << prj_name_now;
+    if ( ! EndWithSlash( prj_name_now ) )
     {
         ONEFLOW::StrIO << "/";
     }
     PrjStatus::prjBaseDir = ONEFLOW::StrIO.str();
+    cout << " PrjStatus::prjBaseDir =  " << PrjStatus::prjBaseDir << "\n";
 }
-
-bool EndWithForwardSlash( const string & fileName )
-{
-    size_t pos = fileName.find_last_of("/");
-    size_t ss = fileName.size();
-    if ( ss == 0 )
-    {
-        return false;
-    }
-    else
-    {
-        bool flag = fileName.substr( ss - 1, 1 ) == "/";
-        return flag;
-    }
-}
-
 
 void MakePrjDir( const string & dirName )
 {
@@ -93,7 +81,10 @@ void OpenPrjFile( fstream & file, const string & fileName, const ios_base::openm
 string GetPrjFileName( const string & fileName )
 {
     ONEFLOW::StrIO.ClearAll();
-    ONEFLOW::StrIO << PrjStatus::prjBaseDir << fileName;
+
+    string fileNameNew = RemoveFirstSlash( fileName );
+
+    ONEFLOW::StrIO << PrjStatus::prjBaseDir << fileNameNew;
 
     string prjFileName = ONEFLOW::StrIO.str();
 

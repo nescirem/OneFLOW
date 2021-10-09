@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -38,10 +38,10 @@ public:
 public:
     void Alloc();
     void DeAlloc();
-    void CmpFlux();
-    void CmpInvFlux();
-    void CmpInvFace();
-    void CmpLimiter();
+    void CalcFlux();
+    void CalcInvFlux();
+    void CalcInvFace();
+    void CalcLimiter();
     void AddInvFlux();
     void PrepareFaceValue();
     void UpdateFaceInvFlux();

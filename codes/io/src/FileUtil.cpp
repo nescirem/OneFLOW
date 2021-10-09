@@ -1,6 +1,6 @@
 /*---------------------------------------------------------------------------*\
     OneFLOW - LargeScale Multiphysics Scientific Simulation Environment
-    Copyright (C) 2017-2019 He Xin and the OneFLOW contributors.
+    Copyright (C) 2017-2020 He Xin and the OneFLOW contributors.
 -------------------------------------------------------------------------------
 License
     This file is part of OneFLOW.
@@ -26,6 +26,7 @@ License
 #include "BasicParallel.h"
 #include "LogFile.h"
 #ifdef _WINDOWS
+#include <windows.h>
 #include <direct.h>
 #include <io.h>
 #else
@@ -62,6 +63,106 @@ void MakeDir( const string & dirName )
     {
         cout << dirName << " directory has been created successfully !\n";
     }
+}
+
+string HX_GetExePath()
+{
+    char buffer[ FILENAME_MAX ] = { 0 };
+#ifdef _WIN32
+    GetModuleFileName( NULL, buffer, FILENAME_MAX );
+#else
+    ssize_t count = readlink( "/proc/self/exe", buffer, FILENAME_MAX );
+#endif
+    string::size_type pos = string( buffer ).find_last_of( "\\/" );
+    return string( buffer ).substr( 0, pos);
+}
+
+string HX_GetCurrentDir()
+{
+#ifdef _WINDOWS
+    char * cwd = _getcwd( 0, 0 );
+#else
+    char * cwd = getcwd( 0, 0 ); 
+#endif
+    std::string working_dir( cwd ) ;
+    std::free( cwd ) ;
+    return working_dir ;
+}
+
+bool EndWithSlash( const string & fileName )
+{
+    if ( EndWithForwardSlash( fileName ) ||
+        EndWithBackwardSlash( fileName ) )
+    {
+        return true;
+    }
+    return false;
+}
+
+bool EndWithBackwardSlash( const string & fileName )
+{
+    size_t pos = fileName.find_last_of("\\");
+    size_t ss = fileName.size();
+    if ( ss == 0 )
+    {
+        return false;
+    }
+    else
+    {
+        bool flag = fileName.substr( ss - 1, 1 ) == "\\";
+        return flag;
+    }
+}
+
+bool EndWithForwardSlash( const string & fileName )
+{
+    size_t pos = fileName.find_last_of("/");
+    size_t ss = fileName.size();
+    if ( ss == 0 )
+    {
+        return false;
+    }
+    else
+    {
+        bool flag = fileName.substr( ss - 1, 1 ) == "/";
+        return flag;
+    }
+}
+
+bool StartWithForwardSlash( const string & fileName )
+{
+    size_t pos = fileName.find_first_of("/");
+    if ( fileName.size() == 0 )
+    {
+        return false;
+    }
+
+    if ( fileName.substr( 0,1 ) == "/" )
+    {
+        return true;
+    }
+    return false;
+}
+
+string RemoveFirstSlash( const string & fileName )
+{
+    if ( StartWithForwardSlash( fileName ) )
+    {
+        int len = fileName.size();
+        return fileName.substr( 1, len - 1 );
+    }
+    return fileName;
+}
+
+string RemoveEndSlash( const string & fileName )
+{
+    if ( EndWithSlash( fileName ) )
+    {
+        int len = fileName.size();
+        return fileName.substr( 0, len - 1 );
+    }
+    return fileName;
+
 }
 
 void OpenFile( fstream & file, const string & fileName, const ios_base::openmode & openMode )
